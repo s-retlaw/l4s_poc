@@ -13,4 +13,15 @@ l4sutils/.mvn/wrapper/maven-wrapper.jar
 wwwroot/
 build_tmp/
 
+client/target/
+client/pom.xml.tag
+client/pom.xml.releaseBackup
+client/pom.xml.versionsBackup
+client/pom.xml.next
+client/release.properties
+client/dependency-reduced-pom.xml
+client/buildNumber.properties
+client/.mvn/timing.properties
+client/# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+client/.mvn/wrapper/maven-wrapper.jar
 
