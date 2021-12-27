@@ -91,19 +91,19 @@ if __name__ == "__main__":
                 description='please enter the values ')
         
         parser.add_argument('--ldap_port', metavar='ldap_port', type=int,
-                help='listener port for LDAP server', default=1389)
+                help='listener port for LDAP server that wil run on this computer', default=1389)
 
         parser.add_argument('--http_ip', metavar='http_ip', type=str,
-                help='Enter IP for HTTP server')
+                help='Enter IP for HTTP server.  This is expected to be an interface on this computer.', required=True)
 
         parser.add_argument('--http_port', metavar='http_port', type=int,
-                help='listener port for HTTP port')
+                help='listener port for HTTP port', required=True)
 
         parser.add_argument('--msf_ip', metavar='msf_ip', type=str,
-                help='MSFConsole ip address')
+                help='MSFConsole ip address.  This can be on any computer.', required=True)
 
         parser.add_argument('--msf_port', metavar='msf_port', type=int,
-                help='MSFConsole listener port')
+                help='MSFConsole listener port', required=True)
 
         args = parser.parse_args()
         print("about to start.....")
