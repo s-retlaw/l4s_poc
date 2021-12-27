@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>l4sutils</groupId>
-  <artifactId>LDAPServer</artifactId>
+  <artifactId>l4sutils</artifactId>
   <version>0.1</version>
 
   <name>l4sutils</name>
