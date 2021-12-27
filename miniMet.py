@@ -6,13 +6,24 @@ import threading
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
+def check_if_installed(prog):
+    try:
+        result = subprocess.call([prog, '-version'], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    except Exception as ex:
+        result = -1
+    finally:
+        if result != 0:
+            print(f'{prog} is not installed...exiting')
+            sys.exit(1)
+
 def ensure_dir_exists(dir_name):
     if os.path.isdir(dir_name):
         return
     try:
-        os.mkdir(dir)
-    except Exception ex:
-        print("Error unable to creat dir : "+dir_name)
+        os.mkdir(dir_name)
+    except Exception as ex:
+        print(f'Error unable to create dir : {dir_name} .......exiting')
+        sys.exit(1)
 
 def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
     f = "MiniMet"
@@ -53,7 +64,7 @@ def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
 #            return os.path.join("wwwroot", relpath)
 #
 
-    class Handler(http.server.SimpleHTTPRequestHandler):
+    class Handler(SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory="wwwroot", **kwargs)
 
@@ -61,13 +72,6 @@ def run_mini_met(http_ip, http_port, msf_ip, msf_port, ldap_port):
     with HTTPServer(('0.0.0.0', int(http_port)), Handler) as httpd:
         print(f'started http server on port {http_port}')
         httpd.serve_forever()
-
-
-def check_if_installed(prog):
-    result = subprocess.call([prog, '-version'], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-    if result != 0:
-        print(f'{prog} is not installed...exiting'
-        sys.exit(1)
 
 
 def create_ldap_server(ldap_port, http_ip, http_port):
