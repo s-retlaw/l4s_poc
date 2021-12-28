@@ -17,7 +17,7 @@ javac and mvn to build the exploits, and host the LDAP server.  I used Java 8.
 Python3 is also required.
 
 #### to get started
-run python3 run_server.py <your_ip_address> <the_http_port> [ldap_port]
+run: python3 run_servers.py <your_ip_address> <the_http_port> [ldap_port]
 
 Then pass the jndi string to a vulnerable client to log i.e:
 if your host was 10.20.30.40 and your metasploit instance was 20.30.40.50 
