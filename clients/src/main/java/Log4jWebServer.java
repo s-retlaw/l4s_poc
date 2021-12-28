@@ -47,15 +47,14 @@ public class Log4jWebServer {
 
       String log_me = t.getRequestHeaders().getFirst("log_me");
 
-      System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
-      this.logger.error(log_me);
-
       String response = "<html><body><h1>Please do not host this on a public computer!!!!</h1>\n";
       if(log_me == null){
         response += "<H3>No logs were written.  Please see the startup output for how to enable logs.</H3>";
       }
       else{
         response += "<H3>Your log_me header was : ("+log_me+")</H3>";
+        System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
+        this.logger.info(log_me);
       }
       response += "</body></html>\n";
 

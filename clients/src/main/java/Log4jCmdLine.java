@@ -9,6 +9,6 @@ public class Log4jCmdLine {
         System.out.println("The is used to trigger the Log4Shell exploit.  The param passed in will be logged.");
         //The default trusturlcodebase of the higher version JDK is false
         System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
-        logger.error(args[0]);
+        logger.info(args[0]);
     }
 }
