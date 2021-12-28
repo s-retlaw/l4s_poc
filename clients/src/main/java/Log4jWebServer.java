@@ -54,7 +54,7 @@ public class Log4jWebServer {
       else{
         response += "<H3>Your log_me header was : ("+log_me+")</H3>";
         System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase","true");
-        this.logger.info(log_me);
+        this.logger.error(log_me);
       }
       response += "</body></html>\n";
 
