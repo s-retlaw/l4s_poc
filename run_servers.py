@@ -29,8 +29,12 @@ def ensure_l4sutils_are_built(jar_file):
     if os.path.isfile(jar_file):
         return 
     print("building l4sutils.jar...this may take a few minutes")
-    subprocess.call(["sh", "-c", "./build_l4sutils.sh"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-    print("just returned from calling build_l4sutils.sh")
+    #subprocess.call(["sh", "-c", "./build_l4sutils.sh"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    pom_file = os.path.join("l4sutils", "pom.xml") 
+    print(f'the pom file is at {pom_file}')
+    subprocess.call(["mvn", "-f", pom_file, "clean", "package", "assembly:single", "-Dmaven.test.skip=true"])#, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+    
+    print("just returned from calling mvn to build jar file")
     if not os.path.isfile(jar_file):
         # if here then the build failed
         print("executing build_l4sutils.sh failed.....exiting")
@@ -86,6 +90,9 @@ def run_servers(http_ip, http_port, ldap_port):
             # return the full path from root_dir
             return os.path.join("wwwroot", relpath)
 
+        def list_directory(self, p):
+            #do not allow dir listing
+            self.send_error(404, "Not Found")
 
     # start the web server
     with HTTPServer(('0.0.0.0', int(http_port)), Handler) as httpd:
