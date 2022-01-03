@@ -30,6 +30,7 @@ def ensure_l4sutils_are_built(jar_file):
     if os.path.isfile(jar_file):
         return 
     print("building l4sutils.jar...this may take a few minutes")
+    check_if_installed("mvn")
     #subprocess.call(["sh", "-c", "./build_l4sutils.sh"], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     pom_file = os.path.join("l4sutils", "pom.xml") 
     print(f'the pom file is at {pom_file}')
@@ -68,7 +69,6 @@ def compile_mm_file(name):
 def run_servers(http_ip, http_port, ldap_port):
     check_if_installed("java")
     check_if_installed("javac")
-    check_if_installed("mvn")
         
     ensure_dir_exists("build_tmp")
     ensure_dir_exists("wwwroot")
