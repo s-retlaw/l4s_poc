@@ -15,7 +15,7 @@ def check_if_installed(prog):
     finally:
         if result != 0:
             print(f'{prog} is not installed...exiting')
-            sys.exit(1)
+            os._exit(1)
 
 def ensure_dir_exists(dir_name):
     if os.path.isdir(dir_name):
@@ -24,7 +24,7 @@ def ensure_dir_exists(dir_name):
         os.mkdir(dir_name)
     except Exception:
         print(f'Error unable to create dir : {dir_name} .......exiting')
-        sys.exit(1)
+        os._exit(1)
 
 def ensure_l4sutils_are_built(jar_file):
     if os.path.isfile(jar_file):
@@ -40,7 +40,7 @@ def ensure_l4sutils_are_built(jar_file):
     if not os.path.isfile(jar_file):
         # if here then the build failed
         print("executing build_l4sutils.sh failed.....exiting")
-        sys.exit(1)
+        os._exit(1)
 
 def compile_mm_file(name):
     parts = name.split("_")
@@ -133,4 +133,4 @@ if __name__ == "__main__":
         run_servers(args.http_ip, args.http_port, args.ldap_port)
     except KeyboardInterrupt:
         print("[EXIT] User interrupted the program.")
-        sys.exit(0)
+        os._exit(0)
