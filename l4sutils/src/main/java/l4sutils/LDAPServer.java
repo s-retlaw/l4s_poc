@@ -63,6 +63,22 @@ public class LDAPServer {
       this.http_base_url = base_url;
     }
 
+    protected String translateName(String base){
+      String name = base.substring(1);
+      String[] parts = name.split(":");
+      System.out.println("parts len : "+parts.length+" : "+(parts.length ==3) );
+      System.out.println("parts[0] : "+parts[0]+" : "+ (parts[0] == "MM"));
+      System.out.println("parts[0] : "+parts[0]+" : "+ (parts[0].equals("MM")));
+
+      if( (parts.length == 3) && (parts[0].equals("MM")) ){
+        name = parts[0]+"_"+parts[1].replace(".", "_")+"_"+parts[2];
+        System.out.println("------------->the translated name is : "+name);
+      }else{
+        System.out.println("NOT MM -- > "+name);
+      }
+      return name;
+    }
+
     @Override
     public void processSearchResult ( InMemoryInterceptedSearchResult result ) {
       String baseDN = result.getRequest().getBaseDN();
@@ -72,7 +88,7 @@ public class LDAPServer {
         e.addAttribute("javaClassName", "TheClass");
         e.addAttribute("objectClass", "javaNamingReference");
         e.addAttribute("javaCodeBase", this.http_base_url.toString()); 
-        e.addAttribute("javaFactory", baseDN.substring(1));
+        e.addAttribute("javaFactory", this.translateName(baseDN));
         result.sendSearchEntry(e);
         result.setResult(new LDAPResult(0, ResultCode.SUCCESS));
       }

