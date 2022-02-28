@@ -54,7 +54,7 @@ public class Log4jWebServer {
   public void runServer(int port) throws IOException{
     HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
     server.createContext("/", new MyHandler());
-    server.setExecutor(null); // creates a default executor
+    server.setExecutor(new ThreadPerTaskExecutor()); // creates a default executor
     server.start();
   }
 
